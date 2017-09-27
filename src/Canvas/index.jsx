@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 import FileDrop from '../FileDrop';
+
+import {setLocation} from '../store';
 
 function loadImage(url) {
   return new Promise(resolve => {
@@ -19,7 +22,12 @@ function readFile(file) {
   });
 }
 
-export default class Canvas extends Component {
+export default connect(
+  null,
+  {
+    setLocation,
+  }
+)(class Canvas extends Component {
   constructor(props) {
     super(props);
 
@@ -40,8 +48,8 @@ export default class Canvas extends Component {
     .then(image => this.setImage(image));
   }
 
-  handleClick = (event) => {
-    console.log(event);
+  handleClick = ({nativeEvent}) => {
+    this.props.setLocation(nativeEvent.offsetX, nativeEvent.offsetY);
   }
 
   setImage(image) {
@@ -70,4 +78,4 @@ export default class Canvas extends Component {
       </div>
     );
   }
-}
+});

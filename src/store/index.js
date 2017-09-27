@@ -5,7 +5,23 @@ const State = Record({
     point: null,
 });
 
-export function reducer(state = new State(), action = {}) {
+const Actions = {
+    SET_LOCATION: 'r/set-location',
+};
 
-    return state;
+export function setLocation(x, y) {
+    return {
+        type: Actions.SET_LOCATION,
+        point: {x, y},
+    };
+}
+
+export function reducer(state = new State(), action = {}) {
+    switch(action.type) {
+    case Actions.SET_LOCATION:
+        return state.set('point', action.point);
+
+    default:
+        return state;
+    }
 }

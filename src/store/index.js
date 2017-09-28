@@ -3,16 +3,28 @@ import {Record, List} from 'immutable';
 const State = Record({
     image: null,
     point: null,
-    currentArea: null,
-    areas: new List(),
+    activeArea: null,
+    sprites: new List(),
+    selectedSprite: null,
+    scale: 1,
 });
 
 const Actions = {
-    ADD_AREA: 'r/add-area',
+    ADD_SPRITE: 'r/add-sprite',
+    REPLACE_SPRITE: 'r/replace-sprite',
     SET_IMAGE: 'r/set-image',
-    SET_CURRENT_AREA: 'r/set-current-area',
+    SET_SCALE: 'r/set-scale',
+    SET_ACTIVE_AREA: 'r/set-active-area',
     SET_LOCATION: 'r/set-location',
+    SELECT_SPRITE: 'r/select-sprite',
 };
+
+export function selectSprite(area) {
+    return {
+        area,
+        type: Actions.SELECT_SPRITE,
+    }
+}
 
 export function setImage(image) {
     return {
@@ -21,17 +33,32 @@ export function setImage(image) {
     };
 }
 
-export function addArea(area) {
+export function setScale(scale) {
     return {
-        area,
-        type: Actions.ADD_AREA,
+        scale,
+        type: Actions.SET_SCALE,
     };
 }
 
-export function setCurrentArea(area) {
+export function addSprite(sprite) {
+    return {
+        sprite,
+        type: Actions.ADD_SPRITE,
+    };
+}
+
+export function replaceSprite(oldSprite, newSprite) {
+    return {
+        oldSprite,
+        newSprite,
+        type: Actions.REPLACE_SPRITE,
+    };
+}
+
+export function setActiveArea(area) {
     return {
         area,
-        type: Actions.SET_CURRENT_AREA,
+        type: Actions.SET_ACTIVE_AREA,
     };
 }
 
@@ -42,33 +69,41 @@ export function setLocation(x, y) {
     };
 }
 
-function createBuffer(image, area) {
-    const buffer = document.createElement('canvas');
-    buffer.width = area.w;
-    buffer.height = area.h;
-    buffer.getContext('2d').drawImage(image, area.x, area.y, area.w, area.h, 0, 0, area.w, area.h);
-    return buffer;
-}
 
 export function reducer(state = new State(), action = {}) {
     switch(action.type) {
     case Actions.SET_IMAGE:
-        return state.set('image', action.image);
+        return state
+            .set('image', action.image)
+            .set('sprites', new List());
 
-    case Actions.ADD_AREA:
-        if (!state.image) {
-            return state;
-        }
+    case Actions.ADD_SPRITE:
+        return state
+            .set('sprites', state.sprites.push(action.sprite))
+            .set('selectedSprite', action.sprite);
 
-        return state.set('areas', state.areas.push(Object.assign(action.area, {
-            buffer: createBuffer(state.image, action.area),
-        })));
+    case Actions.REPLACE_SPRITE:
+        return state
+            .set('sprites', state.sprites.withMutations(sprites => {
+                const index = sprites.findIndex(sprite => sprite === action.oldSprite);
+                if (index > -1) {
+                    sprites.set(index, action.newSprite);
+                }
+                return sprites;
+            }))
+            .set('selectedSprite', action.newSprite);
 
-    case Actions.SET_CURRENT_AREA:
-        return state.set('currentArea', action.area);
+    case Actions.SET_ACTIVE_AREA:
+        return state.set('activeArea', action.area);
+
+    case Actions.SET_SCALE:
+        return state.set('scale', action.scale);
 
     case Actions.SET_LOCATION:
         return state.set('point', action.point);
+
+    case Actions.SELECT_SPRITE:
+        return state.set('selectedSprite', action.area);
 
     default:
         return state;

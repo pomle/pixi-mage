@@ -3,19 +3,22 @@ import {connect} from 'react-redux';
 import AreaDrawer from '../AreaDrawer';
 
 import {drawArea} from '../drawing';
-import {addArea, setCurrentArea, setLocation} from '../store';
+import {createSprite} from '../sprite';
+import {addSprite, setActiveArea, setLocation} from '../store';
 
 import './Document.css';
 
 export default connect(state => ({
-    activeArea: state.currentArea,
+    activeArea: state.activeArea,
     image: state.image,
-    areas: state.areas,
+    scale: state.scale,
+    sprites: state.sprites,
+    selectedSprite: state.selectedSprite,
   }),
   {
-    addArea,
+    addSprite,
     setLocation,
-    setCurrentArea,
+    setActiveArea,
   }
 )(class Document extends Component {
   constructor(props) {
@@ -24,6 +27,8 @@ export default connect(state => ({
     this.state = {
       image: null,
     };
+
+    this.currentScale = 1;
   }
 
   componentDidMount() {
@@ -35,6 +40,15 @@ export default connect(state => ({
     this.redraw();
   }
 
+  componentWillReceiveProps({scale}) {
+    if (scale !== this.currentScale) {
+      const multiplier = scale / this.currentScale;
+      const context = this.canvas.getContext('2d');
+      context.scale(multiplier, multiplier);
+      this.currentScale = scale;
+    }
+  }
+
   onResize = (event) => {
     this.canvas.width = this.node.offsetWidth;
     this.canvas.height = this.node.offsetHeight;
@@ -42,12 +56,21 @@ export default connect(state => ({
   }
 
   handleArea = (area) => {
-    this.props.addArea(area);
+    const {image} = this.props;
+    if (!image) {
+      return;
+    }
+
+    createSprite(image, area)
+    .then(sprite => {
+      if (sprite) {
+        this.props.addSprite(sprite);
+      }
+    });
   }
 
   handleDrawing = (area) => {
-    console.log(area);
-    this.props.setCurrentArea(area);
+    this.props.setActiveArea(area);
   }
 
   handleMouse = ({nativeEvent}) => {
@@ -55,19 +78,21 @@ export default connect(state => ({
   }
 
   redraw() {
-    const {activeArea, areas, image} = this.props;
+    const {activeArea, sprites, image} = this.props;
     const context = this.canvas.getContext('2d');
 
+    context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
     if (image) {
-      context.drawImage(image, 0, 0);
+      context.drawImage(image.data, 0, 0);
     }
 
-    areas.forEach(area => {
+    sprites.forEach(area => {
       drawArea(context, area, '#000');
     });
 
     if (activeArea) {
-      drawArea(context, activeArea, '#f00');
+      drawArea(context, activeArea, '#fff');
     }
   }
 

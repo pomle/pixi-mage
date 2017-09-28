@@ -30,7 +30,9 @@ export default connect(null,
     const file = files[0];
     readFile(file)
     .then(loadImage)
-    .then(image => this.props.setImage(image));
+    .then(data => {
+      this.props.setImage({data});
+    });
   }
 
   render() {

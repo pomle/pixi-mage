@@ -1,3 +1,7 @@
+.Document {
+    position: relative;
+}
+
 .Document canvas {
     position: absolute;
         top: 0;

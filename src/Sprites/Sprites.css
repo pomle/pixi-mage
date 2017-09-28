@@ -1,0 +1,22 @@
+.Sprites {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.Sprites .Sprite {
+    background-color: #000;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border: solid 1px #666;
+    box-shadow: 0 3px 10px -2px #000;
+    cursor: pointer;
+    margin: 5px;
+    height: 64px;
+    width: 64px;
+}
+
+.Sprites .Sprite:hover,
+.Sprites .Sprite.selected {
+    border-color: #fff;
+}

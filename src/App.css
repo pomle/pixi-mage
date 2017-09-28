@@ -1,0 +1,8 @@
+.App .Workspace {
+    display: flex;
+    flex-flow: column;
+}
+
+.App .Workspace .Document {
+    flex: 1;
+}

@@ -1,0 +1,9 @@
+.Output {
+    background: #000;
+    font-family: monospace;
+    position: absolute;
+        bottom: 0;
+        right: 0;
+
+    white-space: pre;
+}

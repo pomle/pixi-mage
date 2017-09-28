@@ -17,7 +17,10 @@
     width: 64px;
 }
 
-.Sprites .Sprite:hover,
+.Sprites .Sprite:hover {
+    border-color: #4df31c;
+}
+
 .Sprites .Sprite.selected {
     border-color: #fff;
 }

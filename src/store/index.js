@@ -1,5 +1,14 @@
 import {Record, List} from 'immutable';
 
+const Sprite = Record({
+    x: 0,
+    y: 0,
+    w: 0,
+    h: 0,
+    url: null,
+    name: '',
+});
+
 const State = Record({
     image: null,
     point: null,
@@ -11,7 +20,8 @@ const State = Record({
 
 const Actions = {
     ADD_SPRITE: 'r/add-sprite',
-    REPLACE_SPRITE: 'r/replace-sprite',
+    UPDATE_SPRITE: 'r/update-sprite',
+    RENAME_SPRITE: 'r/rename-sprite',
     SET_IMAGE: 'r/set-image',
     SET_SCALE: 'r/set-scale',
     SET_ACTIVE_AREA: 'r/set-active-area',
@@ -42,16 +52,16 @@ export function setScale(scale) {
 
 export function addSprite(sprite) {
     return {
-        sprite,
+        sprite: new Sprite(sprite),
         type: Actions.ADD_SPRITE,
     };
 }
 
-export function replaceSprite(oldSprite, newSprite) {
+export function updateSprite(oldSprite, newSprite) {
     return {
         oldSprite,
         newSprite,
-        type: Actions.REPLACE_SPRITE,
+        type: Actions.UPDATE_SPRITE,
     };
 }
 
@@ -71,6 +81,8 @@ export function setLocation(x, y) {
 
 
 export function reducer(state = new State(), action = {}) {
+    console.log(action);
+
     switch(action.type) {
     case Actions.SET_IMAGE:
         return state
@@ -82,7 +94,7 @@ export function reducer(state = new State(), action = {}) {
             .set('sprites', state.sprites.push(action.sprite))
             .set('selectedSprite', action.sprite);
 
-    case Actions.REPLACE_SPRITE:
+    case Actions.UPDATE_SPRITE:
         return state
             .set('sprites', state.sprites.withMutations(sprites => {
                 const index = sprites.findIndex(sprite => sprite === action.oldSprite);

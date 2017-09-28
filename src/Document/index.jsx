@@ -42,6 +42,10 @@ export default connect(state => ({
   }
 
   componentWillReceiveProps({scale}) {
+    this.updateScale(scale);
+  }
+
+  updateScale(scale) {
     if (scale !== this.currentScale) {
       const multiplier = scale / this.currentScale;
       const context = this.canvas.getContext('2d');
@@ -53,6 +57,8 @@ export default connect(state => ({
   onResize = (event) => {
     this.canvas.width = this.node.offsetWidth;
     this.canvas.height = this.node.offsetHeight;
+    this.currentScale = 1;
+    this.updateScale(this.props.scale);
     this.redraw();
   }
 

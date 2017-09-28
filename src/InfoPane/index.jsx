@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {createSprite} from '../sprite';
-import {replaceSprite, setScale} from '../store';
+import {updateSprite, setScale} from '../store';
 
 import './InfoPane.css';
 
@@ -22,7 +22,7 @@ export default connect(state => ({
     sprite: state.selectedSprite,
     scale: state.scale,
 }), {
-  replaceSprite,
+  updateSprite,
   setScale,
 })(class InfoPane extends Component {
   zoomIn = () => {
@@ -137,19 +137,38 @@ export default connect(state => ({
     }));
   }
 
+  rename = (event) => {
+    const oldSprite = this.props.sprite;
+    const newSprite = oldSprite.set('name', event.target.value);
+    this.props.updateSprite(oldSprite, newSprite);
+  }
+
   updateArea(fn) {
     if (!this.props.image || !this.props.sprite) {
       return;
     }
 
-    createSprite(this.props.image, fn(Object.assign({}, this.props.sprite)))
-    .then(newSprite => {
-      this.props.replaceSprite(this.props.sprite, newSprite);
+    const {sprite} = this.props;
+    createSprite(this.props.image, fn({
+      x: sprite.x,
+      y: sprite.y,
+      w: sprite.w,
+      h: sprite.h,
+    }))
+    .then(({x, y, w, h, url}) => {
+      this.props.updateSprite(sprite, sprite
+        .set('url', url)
+        .set('x', x)
+        .set('y', y)
+        .set('w', w)
+        .set('h', h));
     });
   }
 
   render() {
     const {point, scale, sprite} = this.props;
+
+    console.log(sprite);
 
     return (
       <div className="InfoPane">
@@ -182,6 +201,11 @@ export default connect(state => ({
           <li>
             Contract: <br/>
             <button onClick={this.contractRight}>&rarr;</button>|<button onClick={this.contractLeft}>&larr;</button>|<button onClick={this.contractDown}>&darr;</button>|<button onClick={this.contractUp}>&uarr;</button>
+          </li>
+
+          <li>
+            Name: <br/>
+            <input type="text" value={sprite ? sprite.name : ''} disabled={!sprite} onChange={this.rename}/>
           </li>
         </ul>
       </div>

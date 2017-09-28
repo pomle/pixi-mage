@@ -3,6 +3,7 @@
 }
 
 .Document canvas {
+    image-rendering: pixelated;
     position: absolute;
         top: 0;
         bottom: 0;

@@ -2,9 +2,15 @@ html, body, #root, .App, .FileDrop, .Workspace, .Document {
   height: 100%;
 }
 
-a {
+button {
+    background: transparent;
+    border: none;
     color: #fff;
     cursor: pointer;
+    display: inline;
+    font-family: inherit;
+    outline: none;
+    padding: 0;
 }
 
 body {

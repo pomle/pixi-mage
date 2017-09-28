@@ -11,6 +11,7 @@
     border: solid 1px #666;
     box-shadow: 0 3px 10px -2px #000;
     cursor: pointer;
+    image-rendering: pixelated;
     margin: 5px;
     height: 64px;
     width: 64px;

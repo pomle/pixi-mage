@@ -32,6 +32,7 @@ export default connect(state => ({
   }
 
   componentDidMount() {
+    this.canvas.imageSmoothingEnabled = false;
     window.addEventListener('resize', this.onResize);
     this.onResize();
   }

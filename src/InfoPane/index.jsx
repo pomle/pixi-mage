@@ -91,28 +91,28 @@ export default connect(state => ({
 
   transposeUp = () => {
     this.updateArea(area => {
-      area.y -= 1;
+      area.y += 1;
       return area;
     });
   }
 
   transposeDown = () => {
     this.updateArea(area => {
-      area.y += 1;
+      area.y -= 1;
       return area;
     });
   }
 
   transposeLeft = () => {
     this.updateArea(area => {
-      area.x -= 1;
+      area.x += 1;
       return area;
     });
   }
 
   transposeRight = () => {
     this.updateArea(area => {
-      area.x += 1;
+      area.x -= 1;
       return area;
     });
   }
@@ -166,22 +166,22 @@ export default connect(state => ({
         </ul>
 
         <ul>
-          <li>Zoom ({scale}x): <a onClick={this.zoomOut}>Out</a> / <a onClick={this.zoomIn}>In</a> </li>
-          <li><a onClick={this.quantize}>Quantize</a></li>
+          <li>Zoom ({scale}x): <button onClick={this.zoomOut}>Out</button> / <button onClick={this.zoomIn}>In</button> </li>
+          <li><button onClick={this.quantize}>Quantize</button></li>
 
           <li>
             Transpose: <br/>
-            <a onClick={this.transposeLeft}>&larr;</a>|<a onClick={this.transposeRight}>&rarr;</a>|<a onClick={this.transposeUp}>&uarr;</a>|<a onClick={this.transposeDown}>&darr;</a>
+            <button onClick={this.transposeLeft}>&larr;</button>|<button onClick={this.transposeRight}>&rarr;</button>|<button onClick={this.transposeUp}>&uarr;</button>|<button onClick={this.transposeDown}>&darr;</button>
           </li>
 
           <li>
             Expand: <br/>
-            <a onClick={this.expandLeft}>&larr;</a>|<a onClick={this.expandRight}>&rarr;</a>|<a onClick={this.expandUp}>&uarr;</a>|<a onClick={this.expandDown}>&darr;</a>
+            <button onClick={this.expandLeft}>&larr;</button>|<button onClick={this.expandRight}>&rarr;</button>|<button onClick={this.expandUp}>&uarr;</button>|<button onClick={this.expandDown}>&darr;</button>
           </li>
 
           <li>
             Contract: <br/>
-            <a onClick={this.contractRight}>&rarr;</a>|<a onClick={this.contractLeft}>&larr;</a>|<a onClick={this.contractDown}>&darr;</a>|<a onClick={this.contractUp}>&uarr;</a>
+            <button onClick={this.contractRight}>&rarr;</button>|<button onClick={this.contractLeft}>&larr;</button>|<button onClick={this.contractDown}>&darr;</button>|<button onClick={this.contractUp}>&uarr;</button>
           </li>
         </ul>
       </div>

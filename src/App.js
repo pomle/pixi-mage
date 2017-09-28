@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import {reducer} from './store';
-import Canvas from './Canvas';
+import Document from './Document';
+import ImageDrop from './ImageDrop';
 import Info from './Info';
 
 import './App.css';
@@ -18,8 +19,10 @@ class App extends Component {
     return (
       <Provider store={this.store}>
         <div className="App">
-          <Info/>
-          <Canvas/>
+          <ImageDrop>
+            <Info/>
+            <Document/>
+          </ImageDrop>
         </div>
       </Provider>
     );

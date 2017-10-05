@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import {copy} from 'microclip';
+import {prettify} from '../json';
 import {createSprite} from '../sprite';
 import {updateSprite, setScale} from '../store';
 
@@ -20,6 +22,7 @@ export default connect(state => ({
     point: state.point,
     image: state.image,
     sprite: state.selectedSprite,
+    sprites: state.sprites,
     scale: state.scale,
 }), {
   updateSprite,
@@ -128,6 +131,22 @@ export default connect(state => ({
     this.zoom(getZoomIndex(this.props.scale) - 1);
   }
 
+  export = (event) => {
+    const jsonObject = this.props.sprites.map(sprite => {
+      return {
+        name: sprite.name,
+        x: sprite.x,
+        y: sprite.y,
+        w: sprite.w,
+        h: sprite.h
+      };
+    }).toArray();
+
+    const text = prettify(JSON.stringify(jsonObject), '  ');
+    copy(text);
+    console.log(text);
+  }
+
   quantize = () => {
     this.updateArea(sprite => ({
       x: Math.round(sprite.x),
@@ -168,8 +187,6 @@ export default connect(state => ({
   render() {
     const {point, scale, sprite} = this.props;
 
-    console.log(sprite);
-
     return (
       <div className="InfoPane">
         <ul>
@@ -206,6 +223,10 @@ export default connect(state => ({
           <li>
             Name: <br/>
             <input type="text" value={sprite ? sprite.name : ''} disabled={!sprite} onChange={this.rename}/>
+          </li>
+
+          <li>
+            <button onClick={this.export}>Export</button>
           </li>
         </ul>
       </div>

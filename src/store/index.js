@@ -20,6 +20,7 @@ const State = Record({
 
 const Actions = {
     ADD_SPRITE: 'r/add-sprite',
+    DELETE_SPRITE: 'r/delete-sprite',
     UPDATE_SPRITE: 'r/update-sprite',
     RENAME_SPRITE: 'r/rename-sprite',
     SET_IMAGE: 'r/set-image',
@@ -28,13 +29,6 @@ const Actions = {
     SET_LOCATION: 'r/set-location',
     SELECT_SPRITE: 'r/select-sprite',
 };
-
-export function selectSprite(area) {
-    return {
-        area,
-        type: Actions.SELECT_SPRITE,
-    }
-}
 
 export function setImage(image) {
     return {
@@ -55,6 +49,20 @@ export function addSprite(sprite) {
         sprite: new Sprite(sprite),
         type: Actions.ADD_SPRITE,
     };
+}
+
+export function deleteSprite(sprite) {
+    return {
+        sprite,
+        type: Actions.DELETE_SPRITE,
+    }
+}
+
+export function selectSprite(area) {
+    return {
+        area,
+        type: Actions.SELECT_SPRITE,
+    }
 }
 
 export function updateSprite(oldSprite, newSprite) {
@@ -81,8 +89,6 @@ export function setLocation(x, y) {
 
 
 export function reducer(state = new State(), action = {}) {
-    console.log(action);
-
     switch(action.type) {
     case Actions.SET_IMAGE:
         return state
@@ -93,6 +99,11 @@ export function reducer(state = new State(), action = {}) {
         return state
             .set('sprites', state.sprites.push(action.sprite))
             .set('selectedSprite', action.sprite);
+
+    case Actions.DELETE_SPRITE:
+        return state
+            .set('sprites', state.sprites.filter(sprite => sprite !== action.sprite))
+            .delete('selectedSprite');
 
     case Actions.UPDATE_SPRITE:
         return state

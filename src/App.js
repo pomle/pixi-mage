@@ -3,6 +3,7 @@ import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import {reducer} from './store';
 
+import KeyboardInput from './KeyboardInput';
 import Sprites from './Sprites';
 import InfoPane from './InfoPane';
 import Document from './Document';
@@ -21,6 +22,7 @@ class App extends Component {
     return (
       <Provider store={this.store}>
         <div className="App">
+          <KeyboardInput/>
           <ImageDrop>
             <div className='Workspace'>
               <Sprites/>

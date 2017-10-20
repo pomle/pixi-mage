@@ -16,6 +16,7 @@ const State = Record({
     sprites: new List(),
     selectedSprite: null,
     scale: 1,
+    tileSize: {x: 16, y: 16},
 });
 
 const Actions = {

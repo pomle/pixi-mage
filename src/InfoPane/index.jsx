@@ -23,6 +23,7 @@ export default connect(state => ({
     image: state.image,
     sprite: state.selectedSprite,
     sprites: state.sprites,
+    tileSize: state.tileSize,
     scale: state.scale,
 }), {
   updateSprite,
@@ -185,13 +186,14 @@ export default connect(state => ({
   }
 
   render() {
-    const {point, scale, sprite} = this.props;
+    const {point, scale, sprite, tileSize} = this.props;
 
     return (
       <div className="InfoPane">
         <ul>
           <li>X: {point ? point.x : '-'}</li>
           <li>Y: {point ? point.y : '-'}</li>
+          <li>Index: {point ? Math.floor(point.x / tileSize.x) + ':' + Math.floor(point.y / tileSize.y) : '-'}</li>
 
           <li>X1: {sprite ? sprite.x : '-'}</li>
           <li>Y1: {sprite ? sprite.y : '-'}</li>

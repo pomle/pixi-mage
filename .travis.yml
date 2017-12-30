@@ -3,6 +3,7 @@ node_js:
 - '8'
 script:
   - npm run build
+  - echo "pixi.pomle.com" > build/CNAME
 deploy:
   provider: pages
   skip_cleanup: true
